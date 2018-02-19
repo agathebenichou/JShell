@@ -1,0 +1,131 @@
+.TH JShell 1 "17 February 2018" "version 1.0"
+
+.SH NAME
+jshell - a mini shell implementation on Linux
+
+.SH SYNOPSIS
+.B ./jshell
+is the executable program. For instructions, see the 
+.B JSHELL PROGRAM EXECUTION 
+section of the man page. 
+
+.SH DESCRIPTION
+.I JShell 
+is a implementation of a mini shell for Linux. This mini shell, which was written in the C programming language, inherits environment variables from the process that starts it. It is possible to set and remove environment variables, as well as print out the value of the environment variable. Any process created by the shell to execute a command inherits all the shells current environment variables.  
+.br
+
+.I JShell
+can support a pipeline, which  is a sequence of processes chained together by their standard streams so that the output of each process feeds directly as the input to the next. For example, a command like 'ls -l | more' sends the output of the ls command to the input of the more command. This particular pipeline allows a user to page through a directory listing. 
+.br
+
+.I JShell 
+has the ability to enable process statistics on each external command executed, using the built-in command 
+.B stats
+and a series of flags. Additionally, the mini shell is able to execute any default Linux commands, such as ls, more, cat, echo, etc.
+
+.SH JSHELL PROGRAM EXECUTION
+To run the program, there are several compilation steps to take - all of which should be run in the JShell/src directory:
+
+First, run the 
+.B make
+command to build the executable programs and libraries from the source code.
+.br
+
+Next, run 
+.B ./jshell
+to launch the executable program for the mini shell. 
+
+The shell will prompt 
+.B lsh>
+which means that is it ready to execute user text commands. To see a list of commands that the shell can interpret, see the 
+.B OPTIONS
+section of this man page.
+
+.SH OPTIONS
+There are a wide range of commands that JShell can interpret, some of which are shown below:
+.br
+
+To set an environment variable, simply say 'variableName=variableValue' where variableName is the name of the variable you are setting and variableValue is the value of the variable you are setting. There must be no spaces on either side of the '=' sign when setting an environment variable.
+.br
+
+
+To print the value of an environment variable, simply say 'echo $variableName' where variableName is the name given to the environment variable whose value is to be printed out. 
+.br
+
+
+To remove the the environment variable, simply say 'variableName=' where variableName is the name given to the environment variable which is to be removed.
+.br
+
+To implement piping, simply say 'ls -l | more', 'ls | grep text | wc' or any similar command where each command you would like to pipe is separated by a pipe symbol |. There is an example text file called 'example.txt' in the directory which can be employed to demonstrate the capabilities of piping in JShell.
+.br
+
+To enable process statistics, simply say 'stats -flag' where the flag can be '-u' to print the CPU time spent in the user mode, '-s' to print the CPU time spent in the system/kernel mode, '-p' to print the hard page faults, '-v' to print the voluntary context switches, '-i' to print the involuntary context switches, '-a' to print all of the above, '-l' to print a list of the enables statistics and '-c' to clear the list of enabled statistics. It is possible to enter multiple flags after one dash, such as '-us', or a series of single flags, such a '-u -s'. 
+
+.SH EXAMPLES
+Below are some examples of command lines that JShell shell can interpret:
+.br
+
+.B lsh>
+var=5
+.br
+New environment variable var=5
+.br
+
+.B lsh>
+$var
+.br
+5
+.br
+
+.B lsh>
+echo $var hi
+.br
+5 hi
+.br
+
+.B lsh>
+var=
+.br
+Environment variable var removed
+.br
+
+.B lsh>
+cat example.txt | more
+.br 
+These are the contents of the example.txt file:
+Congrats! This is piping!
+.br
+
+.B lsh>
+stats -a
+.br 
+Currently enabled statistics: a
+.br
+.B lsh>
+echo hello
+.br 
+-----------------------Statistics---------------------
+.br
+CPU time spent in user mode: 0.001469 sec
+.br
+CPU time spent in system/kernel mode: 0.000000 sec
+.br
+Hard page faults: 0
+.br
+Voluntary context switches: 8
+.br
+Involuntary context switches: 0
+.br
+-------------------------------------------------------
+
+hello 
+.br
+
+.SH BUGS
+Some of the visual formatting faces issues when overlapping with the 
+.B lsh>
+prompt, but this is a visual interface error and not a functional one.
+Additionally, the implementation of the portion of the project regarding jobs (such as bg, fg, job) could ideally be extended.
+
+.SH Author
+Written by Agathe Benichou (benichoa@lafayette.edu) and Shira Wein (weins@lafayette.edu) at Lafayette College in Easton, PA.

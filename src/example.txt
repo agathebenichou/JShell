@@ -1,0 +1,2 @@
+These are the contents of the example.txt file:
+Congrats! This is piping!
